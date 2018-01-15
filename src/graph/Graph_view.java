@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
@@ -90,17 +92,30 @@ public class Graph_view extends Frame implements ActionListener, WindowListener 
 		String str =e.getActionCommand();
 		
 	if(str == "2D"){
-		//text3.set("A");
 		DefaultCategoryDataset data = new DefaultCategoryDataset();
 		// TODO Auto-generated method stub
 
-		data.addValue(300, "USA", "2005");
-		data.addValue(500, "USA", "2006");
-		data.addValue(120, "USA", "2007");
-
-		data.addValue(200, "China", "2005");
-		data.addValue(400, "China", "2006");
-		data.addValue(320, "China", "2007");
+		int id,ton;
+		String name,year;
+		ResultSet rs;
+		MySQL mysql = new MySQL();
+		rs = mysql.selectAll();//テーブルから情報を持ってきてrsに代入
+		try {
+			while(rs.next()){
+				id = rs.getInt("id");
+				name = rs.getString("name");
+				year = rs.getString("year");
+				ton = rs.getInt("ton");
+				//System.out.println("ID：" + id);
+				//System.out.println("name：" + name);
+				//System.out.println("year：" + year);
+				//System.out.println("ton：" + ton);
+				data.addValue(ton,name,year);
+			}  //try catchで囲む
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		JFreeChart chart = 
 		      ChartFactory.createLineChart("Import Volume",
 		                                   "Year",
@@ -117,16 +132,31 @@ public class Graph_view extends Frame implements ActionListener, WindowListener 
 
 			//処理
 		}else if(str == "3D"){
+			//text3.set("A");
 			DefaultCategoryDataset data = new DefaultCategoryDataset();
 			// TODO Auto-generated method stub
 
-			data.addValue(300, "USA", "2005");
-			data.addValue(500, "USA", "2006");
-			data.addValue(120, "USA", "2007");
-
-			data.addValue(200, "China", "2005");
-			data.addValue(400, "China", "2006");
-			data.addValue(320, "China", "2007");
+			int id,ton;
+			String name,year;
+			ResultSet rs;
+			MySQL mysql = new MySQL();
+			rs = mysql.selectAll();//テーブルから情報を持ってきてrsに代入
+			try {
+				while(rs.next()){
+					id = rs.getInt("id");
+					name = rs.getString("name");
+					year = rs.getString("year");
+					ton = rs.getInt("ton");
+					//System.out.println("ID：" + id);
+					//System.out.println("name：" + name);
+					//System.out.println("year：" + year);
+					//System.out.println("ton：" + ton);
+					data.addValue(ton,name,year);
+				}  //try catchで囲む
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			JFreeChart chart = 
 			      ChartFactory.createLineChart3D("Import Volume",
 			                                   "Year",
@@ -136,9 +166,11 @@ public class Graph_view extends Frame implements ActionListener, WindowListener 
 			                                   true,
 			                                   false,
 			                                   false);
-			ChartFrame frame = new ChartFrame("Simple Pie Chart", chart);
+			ChartFrame frame = new ChartFrame("Line Chart", chart);
 			frame.pack();
 			frame.setVisible(true);
+
+
 		}
 			
 	  
