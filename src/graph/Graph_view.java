@@ -140,7 +140,7 @@ public class Graph_view extends Frame implements ActionListener, WindowListener 
 			String name,year;
 			ResultSet rs;
 			MySQL mysql = new MySQL();
-			rs = mysql.selectAll();//テーブルから情報を持ってきてrsに代入
+			rs = mysql.selectAll();//テーブルから情報を持ってきてrs代入
 			try {
 				while(rs.next()){
 					id = rs.getInt("id");
